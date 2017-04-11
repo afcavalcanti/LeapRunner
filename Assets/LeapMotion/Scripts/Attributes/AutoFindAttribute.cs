@@ -21,7 +21,6 @@ namespace Leap.Unity.Attributes {
     public AutoFindAttribute(AutoFindLocations searchLocations = AutoFindLocations.All) {
       _searchLocations = searchLocations;
     }
-
 #if UNITY_EDITOR
     public void ConstrainValue(SerializedProperty property) {
       if (property.objectReferenceValue != null) return;
