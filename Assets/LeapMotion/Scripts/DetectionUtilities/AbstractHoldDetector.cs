@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
+ * Leap Motion proprietary and  confidential.                                 *
+ *                                                                            *
+ * Use subject to the terms of the Leap Motion SDK Agreement available at     *
+ * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
+ * between Leap Motion and you, your company or other organization.           *
+ ******************************************************************************/
+
+using UnityEngine;
 using Leap.Unity.Attributes;
 
 namespace Leap.Unity { 
@@ -25,7 +34,13 @@ namespace Leap.Unity {
     *
     * If false, the Transform is not affected.
     */
+    [Tooltip("Whether to change the transform of the parent object.")]
     public bool ControlsTransform = true;
+    /** Whether to draw the detector's Gizmos for debugging. (Not every detector provides gizmos.)
+     * @since 4.1.2 
+     */
+    [Tooltip("Draw this detector's Gizmos, if any. (Gizmos must be on in Unity edtor, too.)")]
+    public bool ShowGizmos = true;
 
     protected int _lastUpdateFrame = -1;
 
@@ -180,16 +195,18 @@ namespace Leap.Unity {
         Vector3 centerPosition = _position;
         Quaternion circleRotation = _rotation;
         if (IsHolding) {
-          centerColor = Color.green;
+          centerColor = OnColor;
         } else {
-          centerColor = Color.red;
+          centerColor = OffColor;
         }
         Vector3 axis;
         float angle;
         circleRotation.ToAngleAxis(out angle, out axis);
         Utils.DrawCircle(centerPosition, Normal, Distance / 2, centerColor);
-        Debug.DrawLine(centerPosition, centerPosition + Direction * Distance / 2, Color.grey);
-        Debug.DrawLine(centerPosition, centerPosition + Normal * Distance / 2, Color.white);
+        Gizmos.color = NormalColor;
+        Gizmos.DrawLine(centerPosition, centerPosition + Direction * Distance / 2);
+        Gizmos.color = DirectionColor;
+        Gizmos.DrawLine(centerPosition, centerPosition + Normal * Distance / 2);
       }
     }
     #endif

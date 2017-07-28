@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
+ * Leap Motion proprietary and  confidential.                                 *
+ *                                                                            *
+ * Use subject to the terms of the Leap Motion SDK Agreement available at     *
+ * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
+ * between Leap Motion and you, your company or other organization.           *
+ ******************************************************************************/
+
+using UnityEngine;
 using System;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -6,7 +15,7 @@ using UnityEditor;
 
 /** IHandModel defines abstract methods as a template for building Leap hand models*/
 namespace Leap.Unity {
-  public enum Chirality { Left, Right, Either };
+  public enum Chirality { Left, Right };
   public enum ModelType { Graphics, Physics };
 
   [ExecuteInEditMode]
@@ -47,15 +56,19 @@ namespace Leap.Unity {
       return false;
     }
 
+    public HandPool.ModelGroup group;
+
 #if UNITY_EDITOR
     void Update() {
-      Transform editorPoseSpace;
-      LeapServiceProvider leapServiceProvider = FindObjectOfType<LeapServiceProvider>();
-      if (leapServiceProvider) {
-        editorPoseSpace = leapServiceProvider.transform;
-      }
-      else editorPoseSpace = transform;
       if (!EditorApplication.isPlaying && SupportsEditorPersistence()) {
+        Transform editorPoseSpace;
+        LeapServiceProvider leapServiceProvider = FindObjectOfType<LeapServiceProvider>();
+        if (leapServiceProvider) {
+          editorPoseSpace = leapServiceProvider.transform;
+        } else {
+          editorPoseSpace = transform;
+        }
+
         Hand hand = TestHandFactory.MakeTestHand(0, 0, Handedness == Chirality.Left).TransformedCopy(UnityMatrixExtension.GetLeapMatrix(editorPoseSpace));
         if (GetLeapHand() == null) {
           SetLeapHand(hand);

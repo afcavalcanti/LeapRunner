@@ -1,4 +1,13 @@
-﻿using System.Linq;
+/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
+ * Leap Motion proprietary and  confidential.                                 *
+ *                                                                            *
+ * Use subject to the terms of the Leap Motion SDK Agreement available at     *
+ * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
+ * between Leap Motion and you, your company or other organization.           *
+ ******************************************************************************/
+
+using System.Linq;
 using NUnit.Framework;
 
 namespace Leap.Unity.Tests {
@@ -109,6 +118,13 @@ namespace Leap.Unity.Tests {
 
         Vector jointDirection = (bone.NextJoint - bone.PrevJoint).Normalized;
         assertVectorsEqual(jointDirection, bone.Direction);
+      }
+    }
+
+    [Test]
+    public void RotationIsValid() {
+      foreach (Hand hand in _frame.Hands) {
+        Assert.That(hand.Rotation.IsValid());
       }
     }
 

@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
+ * Leap Motion proprietary and  confidential.                                 *
+ *                                                                            *
+ * Use subject to the terms of the Leap Motion SDK Agreement available at     *
+ * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
+ * between Leap Motion and you, your company or other organization.           *
+ ******************************************************************************/
+
 namespace Leap {
 
 using System;
@@ -47,6 +56,7 @@ using System.Runtime.InteropServices;
                 new Vector(0,0,0),
                 new Vector(0,0,0),
                 Vector.Down,
+                LeapQuaternion.Identity,
                 Vector.Forward,
                 new Vector(-4.36385750984f, 6.5f, 31.0111342526f)
             );

@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
+ * Leap Motion proprietary and  confidential.                                 *
+ *                                                                            *
+ * Use subject to the terms of the Leap Motion SDK Agreement available at     *
+ * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
+ * between Leap Motion and you, your company or other organization.           *
+ ******************************************************************************/
+
+using UnityEngine;
 using UnityEditor;
 using System.Linq;
 using System.Collections.Generic;
@@ -15,9 +24,9 @@ namespace Leap.Unity.Attributes {
         CombinablePropertyAttribute combinableProperty = o as CombinablePropertyAttribute;
         if (combinableProperty != null) {
           if (combinableProperty.SupportedTypes.Count() != 0 && !combinableProperty.SupportedTypes.Contains(property.propertyType)) {
-            Debug.LogError("Property attribute " + 
-                           combinableProperty.GetType().Name + 
-                           " does not support property type " + 
+            Debug.LogError("Property attribute " +
+                           combinableProperty.GetType().Name +
+                           " does not support property type " +
                            property.propertyType + ".");
             continue;
           }
@@ -84,6 +93,7 @@ namespace Leap.Unity.Attributes {
       }
 
       Rect r = position;
+      EditorGUI.BeginChangeCheck();
       EditorGUI.BeginDisabledGroup(shouldDisable);
 
       drawAdditive<IBeforeLabelAdditiveDrawer>(ref r, property);
@@ -123,10 +133,19 @@ namespace Leap.Unity.Attributes {
       drawAdditive<IAfterFieldAdditiveDrawer>(ref r, property);
 
       EditorGUI.EndDisabledGroup();
+      bool didChange = EditorGUI.EndChangeCheck();
 
-      foreach (var a in attributes) {
-        if (a is IPropertyConstrainer) {
-          (a as IPropertyConstrainer).ConstrainValue(property);
+      if (didChange || !property.hasMultipleDifferentValues) {
+        foreach (var a in attributes) {
+          if (a is IPropertyConstrainer) {
+            (a as IPropertyConstrainer).ConstrainValue(property);
+          }
+        }
+      }
+
+      if (didChange) {
+        foreach (var a in attributes) {
+          a.OnPropertyChanged(property);
         }
       }
 
