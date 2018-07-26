@@ -53,6 +53,12 @@ public class PlayerController : MonoBehaviour {
 					translacao = 2.5f; 
 				}
 			} 
+			if(Input.GetMouseButtonDown (0)){
+				translacao = -2.5f; 
+			}
+			if(Input.GetMouseButtonDown (1)){
+				translacao = 2.5f; 
+			}
 			translacao *= Time.deltaTime;
 			profundidade = 5f;
 			profundidade *= Time.deltaTime;
